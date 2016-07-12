@@ -13,17 +13,17 @@ Usage
 
 * Getting a random item that contain captures
 
-    var nyplCaptures = require('public-domain-nypl-captures');
-    nyplCaptures.getRandomItem(logItem);
+      var nyplCaptures = require('public-domain-nypl-captures');
+      nyplCaptures.getRandomItem(logItem);
 
-    function logItem(error, item) {
-      if (error) {
-        console.log(error, error.stack);
+      function logItem(error, item) {
+        if (error) {
+          console.log(error, error.stack);
+        }
+        else {
+          console.log(JSON.stringify(item, null, '  '));
+        }
       }
-      else {
-        console.log(JSON.stringify(item, null, '  '));
-      }
-    }
 
 Output:
 
