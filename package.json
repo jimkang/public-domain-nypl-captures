@@ -1,6 +1,6 @@
 {
   "name": "public-domain-nypl-captures",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Gets captures from the public domain part of the NYPL Digital Collection.",
   "main": "index.js",
   "scripts": {
