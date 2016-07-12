@@ -2,6 +2,7 @@ OFFSETSCMD = ./node_modules/.bin/get-file-line-offsets-in-json
 
 test:
 	node tests/random-item-tests.js
+	node tests/random-capture-tests.js
 
 pushall:
 	git push origin master && npm publish
