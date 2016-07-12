@@ -119,7 +119,7 @@ Output:
       "digitalCollectionsURL": "http://digitalcollections.nypl.org/items/4f3fb950-47ae-0130-b42b-58d385a7b928"
     }
 
-* Getting a single random capture image, along with some metadata about it.
+Getting a single random capture image, along with some metadata about it.
 
     var nyplCaptures = require('public-domain-nypl-captures');
     var opts = {
