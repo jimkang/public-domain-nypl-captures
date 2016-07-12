@@ -4,7 +4,8 @@
   "description": "Gets captures from the public domain part of the NYPL Digital Collection.",
   "main": "index.js",
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "postinstall": "cat data/pd_items_1.ndjson data/pd_items_2.ndjson data/pd_items_3.ndjson data/pd_items_4.ndjson > data/pd_items.ndjson"
   },
   "repository": {
     "type": "git",

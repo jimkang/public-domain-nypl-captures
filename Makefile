@@ -6,5 +6,8 @@ test:
 pushall:
 	git push origin master && npm publish
 
-template-offsets:
+assemble-aggregate-file:
+	cat data/pd_items_1.ndjson data/pd_items_2.ndjson data/pd_items_3.ndjson data/pd_items_4.ndjson > data/pd_items.ndjson
+
+template-offsets: assemble-aggregate-file
 	$(OFFSETSCMD) data/pd_items.ndjson > data/pd_items.ndjson.offsets
