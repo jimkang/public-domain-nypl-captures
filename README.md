@@ -124,7 +124,12 @@ Getting a single random capture image, along with some metadata about it.
     var nyplCaptures = require('public-domain-nypl-captures');
     var opts = {
       filterOutBrokenImageLinks: true,
-      maxRetries: 5
+      maxRetries: 5,
+      validSizes: [
+        'q',
+        'w',
+        'r'
+      ]
     };
     nyplCaptures.getRandomCapture(opts, logCapture);
 
@@ -143,10 +148,24 @@ Output:
       "sourceUUID": "8906f040-c54b-012f-cd7a-58d385a7bc34",
       "title": "The Lincoln Memorial",
       "imageURL": "http://images.nypl.org/index.php?id=4022569&t=g",
+      "preferredImageURL": "http://images.nypl.org/index.php?id=4022569&t=w",
       "digitalCollectionsURL": "http://digitalcollections.nypl.org/items/8906f040-c54b-012f-cd7a-58d385a7bc34"
     }
 
 The  `filterOutBrokenImageLinks` opt will make `getRandomCapture` to check each image link to make sure it's still good before selecting it. `maxRetries`, which defaults to 10, tells it how many times to retry if it gets back items with image links that are all bad (meaning not responding or not images).
+
+`validSizes`, if specified, should be an array listing the desired image sizes in order of preference. The possible values are the [NYPL Digital Collections API imageLink types](http://api.repo.nypl.org/#image-links):
+
+    b - .jpeg center cropped thumbnail (100x100 pixels)
+    f - .jpeg (140 pixels tall with variable width)
+    t - .gif (150 pixels on the long side)
+    r - .jpeg (300 pixels on the long side)
+    w - .jpeg (760 pixels on the long side)
+    q - .jpeg (1600 pixels on the long side)
+    v - .jpeg (2560 pixels on the long side)
+    g - .jpeg original dimensions
+
+`getRandomCapture` will check for the valid sizes in the order specified and return the first one that actually exists if `filterOutBrokenImageLinks` is set. If it is not set, it will just assume the first image size you specify exists. `preferredImageURL` will not exist if it cannot find an image at one of the sizes you specify. If `validSizes` is not set, `preferredImageURL` will not exist in that case, either. `imageURL` will always be set to the original image size (`g`).
 
 Tests
 -----

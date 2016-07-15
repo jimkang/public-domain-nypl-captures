@@ -19,9 +19,12 @@ function isImageMIMEType(response, done) {
 function getRandomCapture(opts, done) {
   var filterOutBrokenImageLinks;
   var maxRetries;
+  var validSizes;
+
   if (opts) {
     filterOutBrokenImageLinks = opts.filterOutBrokenImageLinks;    
     maxRetries = opts.maxRetries;
+    validSizes = opts.validSizes;
   }
 
   if (maxRetries === undefined) {
@@ -54,15 +57,49 @@ function getRandomCapture(opts, done) {
 
     function pickFromCaptureURLs(urls) {
       capture.imageURL = probable.pickFromArray(urls);
+
       if (!capture.imageURL && retries < maxRetries) {
         retries += 1;
         // console.log('retries:', retries);
         callNextTick(getRandomItem, sb(distillItemToCapture, done));
       }
       else {
-        outerDone(null, capture);
+        if (validSizes) {
+          var sizeSpecificURLs = getSizeSpecificURLs(capture.imageURL, validSizes);
+
+          if (filterOutBrokenImageLinks) {
+            var filterOpts = {
+              urls: sizeSpecificURLs,
+              responseChecker: isImageMIMEType
+            };
+            headFilterURLs(filterOpts, sb(addPreferredURL, outerDone));
+          }
+          else {
+            capture.preferredImageURL = sizeSpecificURLs[0];
+            outerDone(null, capture);
+          }
+        }
+        else {
+          outerDone(null, capture);
+        }
       }
     }
+
+    function addPreferredURL(validURLs) {
+      if (validURLs && validURLs.length > 0) {
+        capture.preferredImageURL = validURLs[0];
+      }
+      // If there is no valid preferred size URL, that is OK. Pass back what we have.
+      outerDone(null, capture);
+    }
+  }
+}
+
+function getSizeSpecificURLs(originalSizeURL, sizes) {
+  return sizes.map(getSizeSpecificURL);
+
+  function getSizeSpecificURL(size) {
+    return originalSizeURL.replace('&t=g', '&t=' + size);
   }
 }
 
